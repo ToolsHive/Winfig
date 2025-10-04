@@ -28,6 +28,12 @@ A small, battle-tested Windows configuration toolkit to bootstrap a developer-fr
 - [Table of Contents](#table-of-contents)
 - [Features](#features)
 - [Requirements](#requirements)
+- [Installation](#installation)
+  - [Automated Installation](#automated-installation)
+    - [Bootstrap Script](#bootstrap-script)
+    - [What the Bootstrap Script Does](#what-the-bootstrap-script-does)
+    - [Bootstrap Features](#bootstrap-features)
+  - [Manual Installation](#manual-installation)
 - [Post-Deployment Verification](#post-deployment-verification)
 - [Safety \& Troubleshooting](#safety--troubleshooting)
 - [Contributing](#contributing)
@@ -49,6 +55,66 @@ A small, battle-tested Windows configuration toolkit to bootstrap a developer-fr
 - PowerShell 5.1 or later
 - Internet connection for downloading packages
 - Administrator privileges for certain installations
+
+## Installation
+
+Choose between automated or manual installation methods based on your preference and requirements.
+
+### Automated Installation
+
+The recommended approach using the `bootstrap.ps1` script for a complete hands-off setup experience.
+
+#### Bootstrap Script
+
+The bootstrap script is the main entry point that automates the entire Winfig setup process. It handles environment validation, prerequisite installation, and repository setup.
+
+**Quick Start (Recommended):**
+```powershell
+# Run directly from the web (requires Administrator privileges)
+Invoke-RestMethod -Uri "https://raw.githubusercontent.com/ToolsHive/Winfig/main/bootstrap.ps1" | Invoke-Expression
+```
+
+#### What the Bootstrap Script Does
+
+1. **Environment Validation** - Verifies system compatibility and requirements
+2. **System Restore Point** - Creates a safety restore point before changes
+3. **Package Manager Setup** - Installs and configures Chocolatey and WinGet
+4. **Git Installation** - Ensures Git is available for version control
+5. **Repository Cloning** - Downloads the complete Winfig configuration to your system
+
+#### Bootstrap Features
+
+- **Comprehensive Logging** - Detailed execution logs for troubleshooting
+- **Interactive Prompts** - User confirmation for critical system changes
+- **Error Recovery** - Robust error handling and fallback mechanisms
+- **Progress Indicators** - Clear visual feedback throughout the process
+- **Safety First** - Automatic system restore point creation
+
+### Manual Installation
+
+For users who prefer step-by-step control over the installation process.
+
+1. **Install Prerequisites Manually**
+   - Install Chocolatey package manager
+   - Install Windows Package Manager (WinGet)
+   - Install Git for version control
+
+2. **Download and Run Bootstrap Script**
+   ```powershell
+   # Download the bootstrap script
+   Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ToolsHive/Winfig/main/bootstrap.ps1" -OutFile "bootstrap.ps1"
+   ```
+   ```powershell
+   # Run with administrator privileges
+   .\bootstrap.ps1
+   ```
+
+3. **Follow Interactive Setup**
+   - The script will clone the repository to the appropriate location
+   - Follow the prompts for configuration options
+   - Complete the setup wizard
+
+> **Note**: Even with manual installation, the bootstrap script handles repository cloning and setup. You only need to manually install the prerequisites first.
 
 ## Post-Deployment Verification
 
