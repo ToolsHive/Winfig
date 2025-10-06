@@ -475,8 +475,140 @@ function ValidateEnvironment {
     Write-Host ""
 }
 
+## ---------------------------------------------------------------------------- #
+# Checks if system restore point capability is available
+function Test-RestorePointCapability {
+    try {
+        if ($env:OS -ne "Windows_NT") { return $false }
+
+        $os = Get-CimInstance -ClassName Win32_OperatingSystem -ErrorAction Stop
+        if ($os.ProductType -ne 1) { return $false } # Only Workstation versions support this
+
+        if (-not (Get-Command Checkpoint-Computer -ErrorAction SilentlyContinue)) {
+            return $false
+        }
+
+        $systemDrive = $env:SystemDrive
+        if (-not $systemDrive) { $systemDrive = "C:" }
+
+        # Check for protection status
+        $protectionEnabled = $false
+        try {
+            $vol = Get-WmiObject -Query "SELECT * FROM Win32_Volume WHERE DriveLetter='$systemDrive'" -ErrorAction SilentlyContinue
+            if ($vol) {
+                $protectionEnabled = $vol.AutomaticManagedPagefile -or $vol.SystemVolume
+            }
+        } catch {
+            $protectionEnabled = $false
+        }
+
+        if (-not $protectionEnabled) {
+            try {
+                Enable-ComputerRestore -Drive $systemDrive -ErrorAction SilentlyContinue
+                $protectionEnabled = $true
+            } catch {
+                $protectionEnabled = $false
+            }
+        }
+
+        return $protectionEnabled
+    } catch {
+        return $false
+    }
+}
+
 # ---------------------------------------------------------------------------- #
-# Creates a system restore point
+# Creates a system restore point using Checkpoint-Computer
+function New-RestorePoint {
+    param(
+        [string]$Description = "Winfig Bootstrap Installation",
+        [ValidateSet("APPLICATION_INSTALL", "APPLICATION_UNINSTALL", "DEVICE_DRIVER_INSTALL", "MODIFY_SETTINGS")]
+        [string]$EventType = "MODIFY_SETTINGS",
+        [switch]$Force
+    )
+
+    try {
+        if (-not (Get-Command Checkpoint-Computer -ErrorAction SilentlyContinue)) {
+            return @{ Success = $false; Error = "Checkpoint-Computer cmdlet not available on this system" }
+        }
+
+        $systemDrive = $env:SystemDrive
+        if (-not $systemDrive) { $systemDrive = "C:" }
+
+        # Ensure System Protection is enabled
+        try { Enable-ComputerRestore -Drive $systemDrive -ErrorAction SilentlyContinue } catch {}
+
+        $restorePointName = "Winfig_Bootstrap_$(Get-Date -Format 'yyyyMMdd_HHmmss')"
+        Write-Host "   Creating restore point: $restorePointName" -ForegroundColor $Script:Colors.Info
+
+        # Handle Force parameter by temporarily reducing the frequency limit
+        $registryModified = $false
+        $originalValue = $null
+
+        if ($Force) {
+            try {
+                $regPath = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore"
+                $regName = "SystemRestorePointCreationFrequency"
+
+                # Backup original value
+                $originalValue = Get-ItemProperty -Path $regPath -Name $regName -ErrorAction SilentlyContinue
+
+                # Set to 0 to allow immediate restore point creation
+                Set-ItemProperty -Path $regPath -Name $regName -Value 0 -Type DWord -Force
+                $registryModified = $true
+                Write-Host "   Temporarily reduced restore point frequency limit" -ForegroundColor $Script:Colors.Debug
+            } catch {
+                Write-Host "   Could not modify registry, proceeding anyway" -ForegroundColor $Script:Colors.Warning
+            }
+        }
+
+        try {
+            # Suppress all output and warnings from Checkpoint-Computer
+            $null = Checkpoint-Computer -Description $restorePointName -RestorePointType $EventType -ErrorAction Stop -WarningAction SilentlyContinue
+            $result = @{ Success = $true; Method = "Checkpoint-Computer"; Name = $restorePointName }
+        } finally {
+            # Restore original registry value if we modified it
+            if ($registryModified) {
+                try {
+                    $regPath = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore"
+                    $regName = "SystemRestorePointCreationFrequency"
+
+                    if ($originalValue) {
+                        Set-ItemProperty -Path $regPath -Name $regName -Value $originalValue.$regName -Type DWord -Force
+                    } else {
+                        Remove-ItemProperty -Path $regPath -Name $regName -ErrorAction SilentlyContinue
+                    }
+                    Write-Host "   Restored original restore point frequency setting" -ForegroundColor $Script:Colors.Debug
+                } catch {
+                    Write-Host "   Could not restore registry setting" -ForegroundColor $Script:Colors.Warning
+                }
+            }
+        }
+
+        return $result
+
+    } catch {
+        $errorMsg = $_.Exception.Message
+
+        # Handle the 24-hour restriction gracefully
+        if ($errorMsg -match "1440 minutes" -or $errorMsg -match "already been created") {
+            # A restore point was created within 24 hours - this is actually fine
+            Write-Host "   Recent restore point already exists (within 24 hours)" -ForegroundColor $Script:Colors.Info
+            Write-Host "   Skipping new restore point creation." -ForegroundColor $Script:Colors.Info
+            return @{ Success = $true; Method = "Existing"; Name = "Recent restore point" }
+        } elseif ($errorMsg -match "not enabled") {
+            $errorMsg = "System Protection is disabled. Enable it in System Properties > System Protection"
+        } elseif ($errorMsg -match "insufficient privileges") {
+            $errorMsg = "Insufficient privileges. Run as Administrator"
+        } elseif ($errorMsg -match "service") {
+            $errorMsg = "Volume Shadow Copy Service may be stopped. Check Windows Services"
+        }
+        return @{ Success = $false; Error = $errorMsg }
+    }
+}
+
+# ---------------------------------------------------------------------------- #
+# Requests user confirmation and creates a restore point if possible
 function SetupRestorePoint {
     Write-Host ""
     Write-Host "==============================================================================" -ForegroundColor $Script:Colors.Primary
@@ -489,16 +621,45 @@ function SetupRestorePoint {
         Write-Host "   Skipping system restore point setup." -ForegroundColor $Script:Colors.Warning
         return
     }
-    try {
-        Checkpoint-Computer -Description "Pre-Winfig Bootstrap" -RestorePointType "MODIFY_SETTINGS"
-        Write-Host "   System restore point created successfully." -ForegroundColor $Script:Colors.Success
-    } catch {
-        Write-Host "   Error creating system restore point: $($_.Exception.Message)" -ForegroundColor $Script:Colors.Error
+
+    Write-Host "   Checking system restore capability..." -ForegroundColor $Script:Colors.Info
+
+    if (-not (Test-RestorePointCapability)) {
+        Write-Host "   System restore points are not available or not properly configured." -ForegroundColor $Script:Colors.Warning
+        Write-Host "   To enable System Restore:" -ForegroundColor $Script:Colors.Info
+        Write-Host "   1. Open System Properties (Win+Pause or Control Panel > System)" -ForegroundColor $Script:Colors.Info
+        Write-Host "   2. Click 'System Protection' tab" -ForegroundColor $Script:Colors.Info
+        Write-Host "   3. Select your system drive and click 'Configure'" -ForegroundColor $Script:Colors.Info
+        Write-Host "   4. Select 'Turn on system protection'" -ForegroundColor $Script:Colors.Info
+        Write-Host ""
+        Write-Host "   Continuing without restore point..." -ForegroundColor $Script:Colors.Warning
+        return $false
+    }
+
+    Write-Host "   System restore capability confirmed." -ForegroundColor $Script:Colors.Success
+    $result = New-RestorePoint -Description "Winfig Bootstrap - Pre-installation state" -EventType "MODIFY_SETTINGS"
+
+    if ($result.Success) {
+        Write-Host "   System restore point created successfully: $($result.Name)" -ForegroundColor $Script:Colors.Success
+        Write-Host "   You can restore to this point if needed." -ForegroundColor $Script:Colors.Info
+        return $true
+    } else {
+        Write-Host "   Failed to create system restore point:" -ForegroundColor $Script:Colors.Error
+        Write-Host "   $($result.Error)" -ForegroundColor $Script:Colors.Error
+        Write-Host ""
+        Write-Host "   Common solutions:" -ForegroundColor $Script:Colors.Info
+        Write-Host "   • Run PowerShell as Administrator" -ForegroundColor $Script:Colors.Info
+        Write-Host "   • Enable System Protection in System Properties" -ForegroundColor $Script:Colors.Info
+        Write-Host "   • Ensure Volume Shadow Copy Service is running" -ForegroundColor $Script:Colors.Info
+        Write-Host "   • Check available disk space (need at least 300MB)" -ForegroundColor $Script:Colors.Info
+        Write-Host ""
+        Write-Host "   Continuing without restore point..." -ForegroundColor $Script:Colors.Warning
+        return $false
     }
 }
 
 # ---------------------------------------------------------------------------- #
-# Installs all prerequisites (Chocolatey, Winget, UV, Python, Git, Ansible)
+# Installs all prerequisites (Chocolatey, Winget, Git)
 function InstallPrerequisites {
     Write-Host ""
     Write-Host "==============================================================================" -ForegroundColor $Script:Colors.Primary
@@ -618,7 +779,7 @@ Write-Log "Banner displayed successfully" -Level "INFO"
 ValidateEnvironment
 Write-Log "Environment validation completed" -Level "INFO"
 
-SetupRestorePoint
+SetupRestorePoint | Out-Null
 Write-Log "System restore point setup completed" -Level "INFO"
 
 $prereqsInstalled = InstallPrerequisites
