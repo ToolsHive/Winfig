@@ -1,0 +1,211 @@
+[
+    {
+        "name": "Git - Version Control System",
+        "id": "Git.Git",
+        "description": "Distributed version control for tracking code changes, branching, and collaboration.",
+        "homepage": "https://git-scm.com/",
+        "permission": true
+    },
+    {
+        "name": "GitHub CLI - GitHub Command Line",
+        "id": "GitHub.cli",
+        "description": "Official command-line interface for managing repositories, issues, and pull requests on GitHub.",
+        "homepage": "https://cli.github.com/",
+        "permission": false
+    },
+    {
+        "name": "Visual Studio Code - Code Editor",
+        "id": "Microsoft.VisualStudioCode",
+        "description": "Feature-rich code editor with IntelliSense, debugging, and extensive extension marketplace.",
+        "homepage": "https://code.visualstudio.com/",
+        "permission": true
+    },
+    {
+        "name": "Sublime Text 4 - Text Editor",
+        "id": "SublimeHQ.SublimeText.4",
+        "description": "High-performance text editor with multiple cursors, split editing, and powerful search.",
+        "homepage": "https://www.sublimetext.com/",
+        "permission": true
+    },
+    {
+        "name": "Neovim - Vim-based Editor",
+        "id": "Neovim.Neovim",
+        "description": "Hyperextensible Vim-based text editor with modern features and plugin support.",
+        "homepage": "https://neovim.io/",
+        "permission": true
+    },
+    {
+        "name": "Neovide - Neovim GUI",
+        "id": "Neovide.Neovide",
+        "description": "Modern graphical interface for Neovim with smooth animations and GPU acceleration.",
+        "homepage": "https://neovide.dev/",
+        "permission": true
+    },
+    {
+        "name": "DevToys - Developer Utilities",
+        "id": "DevToys-app.DevToys",
+        "description": "Comprehensive toolbox featuring JSON formatter, regex tester, color picker, and encoding tools.",
+        "homepage": "https://devtoys.app/",
+        "permission": false
+    },
+    {
+        "name": "PowerShell - Shell & Scripting",
+        "id": "Microsoft.PowerShell",
+        "description": "Cross-platform automation platform with object-oriented shell and scripting language.",
+        "homepage": "https://docs.microsoft.com/powershell/",
+        "permission": true
+    },
+    {
+        "name": "Windows Terminal - Command Line",
+        "id": "Microsoft.WindowsTerminal",
+        "description": "Modern, fast terminal application with tabs, panes, and multiple shell support.",
+        "homepage": "https://aka.ms/terminal",
+        "permission": true
+    },
+    {
+        "name": "Go Programming Language",
+        "id": "GoLang.Go",
+        "description": "Statically typed compiled language with concurrency support and garbage collection.",
+        "homepage": "https://golang.org/",
+        "permission": false
+    },
+    {
+        "name": "uv - Python Package Manager",
+        "id": "astral-sh.uv",
+        "description": "Ultra-fast Python package installer and resolver, replacing pip and virtualenv.",
+        "homepage": "https://github.com/astral-sh/uv",
+        "permission": true
+    },
+    {
+        "name": "7-Zip - File Archiver",
+        "id": "7zip.7zip",
+        "description": "High-compression file archiver supporting multiple formats including ZIP, RAR, and TAR.",
+        "homepage": "https://www.7-zip.org/",
+        "permission": true
+    },
+    {
+        "name": "ShareX - Screenshot & Sharing",
+        "id": "ShareX.ShareX",
+        "description": "Advanced screen capture tool with editing, annotations, and cloud sharing capabilities.",
+        "homepage": "https://getsharex.com/",
+        "permission": true
+    },
+    {
+        "name": "PowerToys - Windows Utilities",
+        "id": "Microsoft.PowerToys",
+        "description": "Collection of system utilities including FancyZones, PowerRename, and Color Picker.",
+        "homepage": "https://docs.microsoft.com/powertoys/",
+        "permission": true
+    },
+    {
+        "name": "Nilesoft Shell - Context Menu",
+        "id": "Nilesoft.Shell",
+        "description": "Enhanced Windows context menu with customizable shortcuts and file operations.",
+        "homepage": "https://nilesoft.org/shell/",
+        "permission": true
+    },
+    {
+        "name": "gsudo - Windows Sudo",
+        "id": "gerardog.gsudo",
+        "description": "Elevate command-line commands with administrator privileges, similar to Unix sudo.",
+        "homepage": "https://gerardog.github.io/gsudo/",
+        "permission": true
+    },
+    {
+        "name": "OpenHashTab - File Integrity",
+        "id": "namazso.OpenHashTab",
+        "description": "Windows Explorer integration for calculating and verifying file checksums and hashes.",
+        "homepage": "https://github.com/namazso/OpenHashTab",
+        "permission": true
+    },
+    {
+        "name": "UniGet UI - Package Manager",
+        "id": "UniGet.UniGetUI",
+        "description": "Graphical interface for managing software packages across multiple package managers.",
+        "homepage": "https://uniget.org/",
+        "permission": false
+    },
+    {
+        "name": "Super File - File Manager",
+        "id": "yorukot.superfile",
+        "description": "Modern file manager with dual-pane interface, tabs, and advanced file operations.",
+        "homepage": "https://superfile.dev/",
+        "permission": true
+    },
+    {
+        "name": "AutoHotkey - Automation Scripting",
+        "id": "AutoHotkey.AutoHotkey",
+        "description": "Scripting language for creating hotkeys, macros, and automating Windows tasks.",
+        "homepage": "https://www.autohotkey.com/",
+        "permission": true
+    },
+    {
+        "name": "HTTrack - Website Copier",
+        "id": "XavierRoche.HTTrack",
+        "description": "Download entire websites for offline browsing with mirroring capabilities.",
+        "homepage": "https://www.httrack.com/",
+        "permission": false
+    },
+    {
+        "name": "Zen Browser - Privacy Browser",
+        "id": "Zen-Team.Zen-Browser",
+        "description": "Privacy-focused web browser with built-in ad blocking and tracking protection.",
+        "homepage": "https://zenbrowser.io/"
+    },
+    {
+        "name": "Thunderbird - Email Client",
+        "id": "Mozilla.Thunderbird",
+        "description": "Full-featured email, calendar, and chat client with extensive add-on support.",
+        "homepage": "https://www.thunderbird.net/",
+        "permission": true
+    },
+    {
+        "name": "Notion - Workspace",
+        "id": "Notion.Notion",
+        "description": "All-in-one workspace for notes, tasks, wikis, and databases with team collaboration.",
+        "homepage": "https://www.notion.so/",
+        "permission": true
+    },
+    {
+        "name": "Zoom - Video Conferencing",
+        "id": "Zoom.Zoom.EXE",
+        "description": "HD video meetings, webinars, and team chat with screen sharing and recording.",
+        "homepage": "https://zoom.us/",
+        "permission": false
+    },
+    {
+        "name": "OneDrive - Cloud Storage",
+        "id": "Microsoft.OneDrive",
+        "description": "Microsoft's cloud storage with file synchronization and Office integration.",
+        "homepage": "https://onedrive.live.com/",
+        "permission": false
+    },
+    {
+        "name": "Google Drive - Cloud Storage",
+        "id": "Google.GoogleDrive",
+        "description": "Google's file storage with collaboration features and Google Workspace integration.",
+        "homepage": "https://drive.google.com/",
+        "permission": false
+    },
+    {
+        "name": "Dropbox - File Synchronization",
+        "id": "Dropbox.Dropbox",
+        "description": "Cloud storage with file synchronization, sharing, and collaboration tools.",
+        "homepage": "https://www.dropbox.com/",
+        "permission": false
+    },
+    {
+        "name": "OpenVPN - VPN Client",
+        "id": "OpenVPNTechnologies.OpenVPNConnect",
+        "description": "Open-source VPN solution for secure remote access and site-to-site connectivity.",
+        "homepage": "https://openvpn.net/",
+        "permission": false
+    },
+    {
+        "name": "AnyDesk - Remote Desktop",
+        "id": "AnyDesk.AnyDesk",
+        "description": "Fast remote desktop access with file transfer and session recording capabilities.",
+        "homepage": "https://anydesk.com/",
+        "permission": false
+    }
+]

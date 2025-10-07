@@ -1,0 +1,106 @@
+[
+    {
+        "name": "LazyGit - Git TUI",
+        "id": "lazygit",
+        "description": "Beautiful terminal interface for Git with visual commit history and easy navigation.",
+        "homepage": "https://github.com/jesseduffield/lazygit",
+        "permission": true
+    },
+    {
+        "name": "OneFetch - Git Repository Stats",
+        "id": "onefetch",
+        "description": "Display project information and Git statistics directly in your terminal with ASCII art.",
+        "homepage": "https://github.com/o2sh/onefetch",
+        "permission": true
+    },
+    {
+        "name": "Bat - Modern Cat",
+        "id": "bat",
+        "description": "Enhanced file viewer with syntax highlighting, Git integration, and paging functionality.",
+        "homepage": "https://github.com/sharkdp/bat",
+        "permission": true
+    },
+    {
+        "name": "cURL - Data Transfer Tool",
+        "id": "curl",
+        "description": "Powerful command-line tool for transferring data with URL syntax, supporting multiple protocols.",
+        "homepage": "https://curl.se/",
+        "permission": true
+    },
+    {
+        "name": "fzf - Fuzzy Finder",
+        "id": "fzf",
+        "description": "Blazing-fast command-line fuzzy finder for files, commands, history, and more.",
+        "homepage": "https://github.com/junegunn/fzf",
+        "permission": true
+    },
+    {
+        "name": "ripgrep - Search Tool",
+        "id": "ripgrep",
+        "description": "Ultra-fast text search tool that respects your .gitignore and recursively searches code.",
+        "homepage": "https://github.com/BurntSushi/ripgrep",
+        "permission": true
+    },
+    {
+        "name": "Starship - Cross-Shell Prompt",
+        "id": "starship",
+        "description": "Minimal, blazing-fast, and infinitely customizable prompt for any shell with Git status.",
+        "homepage": "https://starship.rs/",
+        "permission": true
+    },
+    {
+        "name": "Zoxide - Smart Directory Jumper",
+        "id": "zoxide",
+        "description": "Smarter cd command that learns your habits and jumps to frequently used directories instantly.",
+        "homepage": "https://github.com/ajeetdsouza/zoxide",
+        "permission": true
+    },
+    {
+        "name": "HashMyFiles - File Integrity",
+        "id": "hashmyfiles",
+        "description": "Lightweight utility to calculate MD5, SHA1, and other hashes for file verification.",
+        "homepage": "https://www.nirsoft.net/utils/hash_my_files.html"
+    },
+    {
+        "name": "WinFetch - System Information",
+        "id": "winfetch",
+        "description": "Elegant system information tool for Windows with detailed hardware and OS details.",
+        "homepage": "https://github.com/Maximus5/WinFetch",
+        "permission": true
+    },
+    {
+        "name": "nvm-windows - Node Version Manager",
+        "id": "nvm",
+        "description": "Easily switch between Node.js versions and manage multiple development environments.",
+        "homepage": "https://github.com/coreybutler/nvm-windows",
+        "permission": true
+    },
+    {
+        "name": "ExifTool - Metadata Editor",
+        "id": "exiftool",
+        "description": "Powerful command-line tool for reading, writing, and editing metadata in images and files.",
+        "homepage": "https://exiftool.org/",
+        "permission": true
+    },
+    {
+        "name": "Ntop - Htop for Windows",
+        "id": "ntop.portable",
+        "description": "Htop-like system-monitor with Vi-emulation for Windows. Because using Task Manager is not cool enough.",
+        "homepage": "https://github.com/gsass1/NTop/",
+        "permission": true
+    },
+    {
+        "name": "Windhawk - Windows Customizer",
+        "id": "windhawk",
+        "description": "Advanced Windows customization tool with plugin system for enhancing desktop experience.",
+        "homepage": "https://windhawk.net/",
+        "permission": true
+    },
+    {
+        "name": "Discord - Communication Platform",
+        "id": "discord",
+        "description": "All-in-one voice, video, and text chat for communities, gamers, and teams.",
+        "homepage": "https://discord.com/",
+        "permission": false
+    }
+]
